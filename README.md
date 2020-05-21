@@ -56,17 +56,28 @@ Moq
 * Дополнительно для работы отправки сообщений при реализации необходимо изменить данные в "\MeetingService\Services\EmailService.cs" и "\MeetingService\Config\AuthOptions.cs" на актуальные.
 
 Если уже имеется VS, то после запуска ctr+f5 в консоли диспетчера или в powershell (на разных ос могут быть различия) можно работать через утилиту Invoke-RestMethod:
+
 Запуск метода ViewAllMeetings:
+
 Invoke-RestMethod http://localhost:50590/api/meetings/viewallmeetings -Method POST
+
 Запуск метода DeleteAttendee:
+
 Invoke-RestMethod http://localhost:50590/api/meetings/deleteattendee/2 -Method POST
+
 Запуск метода DeleteMeeting
+
 Invoke-RestMethod http://localhost:50590/api/meetings/deletemeeting/2 -Method POST
+
 Запуск метода AddMeeting:
+
 Invoke-RestMethod http://localhost:50590/api/meetings/AddMeeting -Method POST -Body (@{title = "Meeting6"; datetimestart = "05/10/2020 13:00"; datetimeend = "05/10/2020 17:00"} | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
+
 Запуск метода AddAttendee:
+
 $body = !здесь должны быть данные участников, но пока не смог правильно их внести
 !данные в json:
+
 ```json
 {
     meetingid: "3",
@@ -82,13 +93,16 @@ $body = !здесь должны быть данные участников, н�
     ]
 }
 ```
+
 Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
 
 Имеются ещё методы ConfirmEmail, на который должен проходить по ссылке участник и часть кода в теле метода AddAttendee, но они пока не настроены до конца.
 
 Метод AddAttende можно протестировать с помощью Postman:
 путь указать:
+
 Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
+
 В Body->raw->json внести:
 {
     "meetingid": "10",
@@ -103,4 +117,5 @@ Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -
         }
     ]
 }
+
 Затем сделать запрос и вернуться значения, кто был добавлен, а кто был отклонён.
