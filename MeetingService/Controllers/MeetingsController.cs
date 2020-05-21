@@ -232,14 +232,8 @@ namespace MeetingsService.Controllers
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             db.Tokens.Add(new Token () { AttendeeId = id, Code = encodedJwt});
-            /*
-            var response = new
-            {
-                access_token = encodedJwt,
-                username = name
-            };
-            new JsonResult(response);
-            */
+
+            //email
             var callbackUrl = Url.Action(
                 "CoonfirmEmail",
                 "Meetings",
