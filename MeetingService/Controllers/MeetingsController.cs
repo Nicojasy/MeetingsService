@@ -24,7 +24,7 @@ namespace MeetingsService.Controllers
         }
 
         //Invoke-RestMethod http://localhost:50590/api/meetings/viewallmeetings -Method POST
-        // POST api/meeting
+        // POST api/meetings
         [HttpPost]
         [Route("[action]")]
         public ActionResult ViewAllMeetings()
@@ -55,10 +55,11 @@ namespace MeetingsService.Controllers
             return meetings;
         }
 
-        // DELETE api/meeting/deleteattendee/5
+        //Invoke-RestMethod http://localhost:50590/api/meetings/deleteattendee/2 -Method POST
+        // DELETE api/meetings/deleteattendee/5
         [HttpPost]
         [Route("[action]/{id}")]
-        public async Task<ActionResult<Meeting>> DeleteAttendee(int id)
+        public async Task<ActionResult> DeleteAttendee(int id)
         {
             Attendee attendee = db.Attendees.FirstOrDefault(a => a.Id == id);
             if (attendee == null)
@@ -70,10 +71,11 @@ namespace MeetingsService.Controllers
             return Ok($"{attendee.Name}: {attendee.Email} is deleted");
         }
 
+        //Invoke-RestMethod http://localhost:50590/api/meetings/deletemeeting/2 -Method POST
         // DELETE api/meeting/deletemeeting/5
         [HttpPost]
         [Route("[action]/{id}")]
-        public async Task<ActionResult<Meeting>> DeleteMeeting(int id)
+        public async Task<ActionResult> DeleteMeeting(int id)
         {
             Meeting meeting = db.Meetings.FirstOrDefault(m => m.Id == id);
             if (meeting == null)
@@ -85,7 +87,7 @@ namespace MeetingsService.Controllers
             return Ok($"{meeting.Title} is deleted");
         }
 
-        //Invoke-RestMethod http://localhost:50590/api/meetings/AddMeeting -Method POST -Body (@{title = "Meeting6"; date = "05/07/2009 13:00"} | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
+        //Invoke-RestMethod http://localhost:50590/api/meetings/AddMeeting -Method POST -Body (@{title = "Meeting6"; datetimestart = "05/10/2020 13:00"; datetimeend = "05/10/2020 17:00"} | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
         // ADD api/meeting/addmeeting
         [HttpPost]
         [Route("[action]")]
@@ -112,7 +114,7 @@ namespace MeetingsService.Controllers
         // ADD api/meeting/addattendee
         [HttpPost]
         [Route("[action]")]
-        public async Task<ActionResult> AddAttendee(AttendeesDto dto)
+        public async Task<IActionResult> AddAttendee(AttendeesDto dto)
         {
             if (!int.TryParse(dto.meetingid, out int meetingid))
                 return BadRequest($"Meeting \"{meetingid}\" must be a number!");

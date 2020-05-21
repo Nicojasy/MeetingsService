@@ -1,7 +1,6 @@
 using MeetingsService.Controllers;
 using MeetingsService.Models;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
