@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30105.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetingsService", "MeetingService\MeetingsService.csproj", "{69D47868-A2B2-482A-A192-9DA9AD9A8366}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetingsService.Test", "MeetingsService.Test\MeetingsService.Test.csproj", "{521B5DD9-A44A-4CBB-A3BD-FD351F34C1AC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69D47868-A2B2-482A-A192-9DA9AD9A8366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69D47868-A2B2-482A-A192-9DA9AD9A8366}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69D47868-A2B2-482A-A192-9DA9AD9A8366}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69D47868-A2B2-482A-A192-9DA9AD9A8366}.Release|Any CPU.Build.0 = Release|Any CPU
+		{521B5DD9-A44A-4CBB-A3BD-FD351F34C1AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{521B5DD9-A44A-4CBB-A3BD-FD351F34C1AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{521B5DD9-A44A-4CBB-A3BD-FD351F34C1AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{521B5DD9-A44A-4CBB-A3BD-FD351F34C1AC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D004436E-550E-4BDB-9B1A-657D8B29C95B}
+	EndGlobalSection
+EndGlobal
