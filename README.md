@@ -43,7 +43,7 @@ xunit.runner.visualstudio
 Microsoft.NET.Test.Sdk
 Moq
 
-###Запуск:
+### Запуск:
 В проекте необходимо открыть и перед запуском настроить:
 * Необходимо изменить значение "DefaultConnection" на актуальное для настройки бд по пути "\MeetingService\appsettings.json"
 ```json
