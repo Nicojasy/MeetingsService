@@ -80,15 +80,15 @@ $body = !здесь должны быть данные участников, н�
 
 ```json
 {
-    meetingid: "3",
-    attendee: [
+    "meetingid": "10",
+    "attendee": [
         {
-           name: "Jack",
-           email: "jack@gmail.com"
+            "name": "Jake",
+            "email": "jake@gmail.com"
         },
         {
-            name: "Julia",
-            email: "julia@gmail.com"
+            "name": "Kate",
+            "email": "Kate@gmail.com"
         }
     ]
 }
@@ -104,18 +104,21 @@ Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -
 Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
 
 В Body->raw->json внести:
+
+```json
 {
     "meetingid": "10",
     "attendee": [
         {
-            "name": "Dimak",
-            "email": "dimak@gmail.com"
+            "name": "Jake",
+            "email": "jake@gmail.com"
         },
         {
-            "name": "Gimak",
-            "email": "gimak@gmail.com"
+            "name": "Kate",
+            "email": "Kate@gmail.com"
         }
     ]
 }
+```
 
 Затем сделать запрос и вернуться значения, кто был добавлен, а кто был отклонён.
