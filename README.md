@@ -1,21 +1,21 @@
 # Cервис для постановки встреч
 
-
 ## Детали реализации
-* Приложение на ASP.NET Core 3.1 Web API;
-* Для создания базы данных использовал EF Core + Sql server; 
-*	При первом запуске в Program.cs создаётся бд и вносятся начальные данные. С этого момента данные будут сохраняться;
+*   Приложение на ASP.NET Core 3.1 Web API;
+*   Для создания базы данных использовал EF Core + Sql server; 
+*   При первом запуске в Program.cs создаётся бд и вносятся начальные данные. С этого момента данные будут сохраняться;
 *	Инструкция по подключению ниже.
 
 Реализованные методы:
-* Поставить встречу (AddMeeting);
-* Отменить встречу (DeleteMeeting);
-* Добавить участников (AddAttendee);
-* Удалить участника (DeleteAttendee);
-* Вывести список встреч с участниками (ViewAllMeetings).
+*   Поставить встречу (AddMeeting);
+*   Отменить встречу (DeleteMeeting);
+*   Добавить участников (AddAttendee);
+*   Удалить участника (DeleteAttendee);
+*   Вывести список встреч с участниками (ViewAllMeetings).
 
 Методы обрабатывают HTTP POST запросы с телом, содержащим все необходимые параметры в JSON.
-xUnit тест на метод добавления встречи. 
+<br>
+xUnit тест на метод добавления встречи имеется.
 
 Реализовано также:
 * Проверка занято/свободно время участников;
@@ -30,6 +30,50 @@ P.S.: отправка сообщения на почту реализована
 
 ## Работа с проектом
 
+### Вводная
+
+Есть 5 методов для работы с сервисом встреч:
+
+*   Вывести список встреч с участниками (ViewAllMeetings)
+    
+    URL-адрес: http://localhost:50590/api/meetings/viewallmeetings
+    
+    Body: null
+    
+    Output:
+    
+*   Удалить участника (DeleteAttendee)
+    
+    URL-адрес: http://localhost:50590/api/meetings/deleteattendee/2
+    
+    Body: null
+    
+    Output:
+    
+*   Отменить встречу (DeleteMeeting)
+    
+    URL-адрес: http://localhost:50590/api/meetings/deletemeeting/2
+    
+    Body: null
+    
+    Output:
+        
+*   Поставить встречу (AddMeeting)
+
+    URL-адрес: http://localhost:50590/api/meetings/AddMeeting
+    
+    Body: title, datetimestart, datetimeend
+    
+    Output:
+    
+*   Добавить участников (AddAttendee)
+    
+    URL-адрес: http://localhost:50590/api/meetings/AddAttendee
+    
+    Body: meetingid, attendee: \[{name, email},{name, email},..{name,email}]
+
+    Output:
+    
 ### Для работы приложения включены пакеты
 
 Работа EF Core:
@@ -70,13 +114,13 @@ P.S.: отправка сообщения на почту реализована
 
 2. Дополнительно для работы отправки сообщений при реализации необходимо изменить данные в "\MeetingService\Services\EmailService.cs" и "\MeetingService\Config\AuthOptions.cs" на актуальные.
 
-3. Возможно, потребуется создать бд на сервере без создания таблиц.
+3. Возможно, потребуется создать бд "meetingsservice" на сервере без создания таблиц.
 
 ### Запуск
 
 #### powershell
 
-Если уже имеется VS, то после запуска ctr+f5 в консоли диспетчера или в powershell (на разных ос могут быть различия) можно работать через утилиту Invoke-RestMethod:
+Если уже имеется VS, то запускаем (ctr+f5). Теперь можно работать в консоли диспетчера проекта или в powershell (на разных ос могут быть различия) через утилиту Invoke-RestMethod:
 
 Запуск метода ViewAllMeetings():
 
@@ -86,7 +130,7 @@ P.S.: отправка сообщения на почту реализована
 
 > Invoke-RestMethod http://localhost:50590/api/meetings/deleteattendee/2 -Method POST
 
-Запуск метода DeleteMeeting(Id) 
+Запуск метода DeleteMeeting(Id):
 
 > Invoke-RestMethod http://localhost:50590/api/meetings/deletemeeting/2 -Method POST
 
@@ -150,9 +194,9 @@ P.S.: отправка сообщения на почту реализована
 
 4. Отправить запрос.
 
-В ответе вернуться значения, где будет указано: кто был добавлен, а кто был отклонён (в том числе по причине занятости участника).
+В ответе вернутся значения, где будет указано: кто был добавлен, а кто был отклонён (в том числе по причине занятости участника).
 
-Таким же образом тестируются остальные методы, где необходимо либо ввести ссылку, либо ещё указать json данные
+Таким же образом тестируются остальные методы, где необходимо либо ввести ссылку, либо ещё указать json данные:
 
 Запуск метода ViewAllMeetings():
 
@@ -162,7 +206,7 @@ P.S.: отправка сообщения на почту реализована
 
 > http://localhost:50590/api/meetings/deleteattendee/2
 
-Запуск метода DeleteMeeting(Id) 
+Запуск метода DeleteMeeting(Id):
 
 > http://localhost:50590/api/meetings/deletemeeting/2
 
@@ -170,6 +214,42 @@ P.S.: отправка сообщения на почту реализована
 
 > http://localhost:50590/api/meetings/AddMeeting
 
+>json данные для отправки
+<br>
+```json
+{
+    "title": "MeetingN",
+    "datetimestart": "07/08/2020 10:40",
+    "datetimeend": "07/08/2020 12:10"
+}
+```
+
 Запуск метода AddAttendee(AttendeeDto):
 
 > http://localhost:50590/api/meetings/AddAttendee
+
+>json данные для отправки
+<br>
+```json
+{
+    "meetingid": "2",
+    "attendee": [
+        {
+            "name": "Matt",
+            "email": "matt@gmail.com"
+        },
+        {
+            "name": "Julia",
+            "email": "julia@gmail.com"
+        },
+        {
+            "name": "Henry",
+            "email": "henry@gmail.com"
+        },
+        {
+            "name": "Jake",
+            "email": "jake@gmail.com"
+        }
+    ]
+}
+```
