@@ -34,19 +34,24 @@ P.S.: отправка сообщения на почту реализована
 
 Работа EF Core:
 
-> Microsoft.EntityFrameworkCore.SqlServer<br>
+> Microsoft.EntityFrameworkCore.SqlServer
+<br>
 > Microsoft.EntityFrameworkCore.Tools
 
 Для отправки email и создания Token:
 
-> MailKit<br>
+> MailKit
+<br>
 > Microsoft.IdentityModel.Tokens
 
 Для xUnit-тестирования:
 
-> xunit<br>
-> xunit.runner.visualstudio<br>
-> Microsoft.NET.Test.Sdk<br>
+> xunit
+<br>
+> xunit.runner.visualstudio
+<br>
+> Microsoft.NET.Test.Sdk
+<br>
 > Moq
 
 ### Перед запуском
@@ -85,11 +90,11 @@ P.S.: отправка сообщения на почту реализована
 
 > Invoke-RestMethod http://localhost:50590/api/meetings/deletemeeting/2 -Method POST
 
-Запуск метода AddMeeting(AttendeeDto):
+Запуск метода AddMeeting(MeetingDto):
 
 > Invoke-RestMethod http://localhost:50590/api/meetings/AddMeeting -Method POST -Body (@{title = "Meeting6"; datetimestart = "05/10/2020 13:00"; datetimeend = "05/10/2020 17:00"} | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
 
-Запуск метода AddAttendee:
+Запуск метода AddAttendee(AttendeeDto):
 
 > $body = //здесь должны быть введены данные участников
 <br>
@@ -123,7 +128,7 @@ P.S.: отправка сообщения на почту реализована
 1. Установить метод POST.
 
 2. Указать путь:
-> Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee
+> http://localhost:50590/api/meetings/AddAttendee
 
 3. В Body->raw->json внести:
 
@@ -145,6 +150,26 @@ P.S.: отправка сообщения на почту реализована
 
 4. Отправить запрос.
 
-Вернуться значения, где будет указано: кто был добавлен, а кто был отклонён.
+В ответе вернуться значения, где будет указано: кто был добавлен, а кто был отклонён (в том числе по причине занятости участника).
 
-Таким же образом тестируются остальные методы, где необходимо либо ввести ссылку, либо ещё указать json данные.
+Таким же образом тестируются остальные методы, где необходимо либо ввести ссылку, либо ещё указать json данные
+
+Запуск метода ViewAllMeetings():
+
+> http://localhost:50590/api/meetings/viewallmeetings
+
+Запуск метода DeleteAttendee(Id):
+
+> http://localhost:50590/api/meetings/deleteattendee/2
+
+Запуск метода DeleteMeeting(Id) 
+
+> http://localhost:50590/api/meetings/deletemeeting/2
+
+Запуск метода AddMeeting(MeetingDto):
+
+> http://localhost:50590/api/meetings/AddMeeting
+
+Запуск метода AddAttendee(AttendeeDto):
+
+> http://localhost:50590/api/meetings/AddAttendee
