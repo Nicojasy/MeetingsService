@@ -34,24 +34,19 @@ P.S.: отправка сообщения на почту реализована
 
 Работа EF Core:
 
-> Microsoft.EntityFrameworkCore.SqlServer
-
+> Microsoft.EntityFrameworkCore.SqlServer<br>
 > Microsoft.EntityFrameworkCore.Tools
 
 Для отправки email и создания Token:
 
-> MailKit
-
+> MailKit<br>
 > Microsoft.IdentityModel.Tokens
 
 Для xUnit-тестирования:
 
-> xunit
-
-> xunit.runner.visualstudio
-
-> Microsoft.NET.Test.Sdk
-
+> xunit<br>
+> xunit.runner.visualstudio<br>
+> Microsoft.NET.Test.Sdk<br>
 > Moq
 
 ### Перед запуском
@@ -74,6 +69,8 @@ P.S.: отправка сообщения на почту реализована
 
 ### Запуск
 
+#### powershell
+
 Если уже имеется VS, то после запуска ctr+f5 в консоли диспетчера или в powershell (на разных ос могут быть различия) можно работать через утилиту Invoke-RestMethod:
 
 Запуск метода ViewAllMeetings:
@@ -94,9 +91,8 @@ P.S.: отправка сообщения на почту реализована
 
 Запуск метода AddAttendee:
 
-> $body = здесь должны быть данные участников, но пока не смог правильно их внести
-
-> !данные в json:
+> $body = //здесь должны быть данные участников, но пока не смог правильно их внести<br>
+> данные в json:<br>
 
 ```json
 {
@@ -112,11 +108,12 @@ P.S.: отправка сообщения на почту реализована
         }
     ]
 }
-```
-
+```<br>
 > Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
 
 Имеются ещё методы ConfirmEmail, на который должен проходить по ссылке участник и часть кода в теле метода AddAttendee, но они пока не настроены до конца.
+
+#### postman
 
 Метод AddAttende можно протестировать с помощью Postman:
 путь указать:
