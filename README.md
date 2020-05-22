@@ -135,8 +135,8 @@ P.S.: отправка сообщения на почту реализована
 
 Запуск метода AddAttendee(AttendeeDto):
 
-> $body = //здесь должны быть введены данные участников<br>
-> данные в JSON, которые должны будут записаны в body:<br>
+> $body = //здесь должны быть введены данные участников <br>
+> данные в JSON, которые должны будут записаны в body: <br>
 ```json
 {
     "meetingid": "10",
@@ -152,8 +152,8 @@ P.S.: отправка сообщения на почту реализована
     ]
 }
 ```
-<br>
-> А затем вводим
+><br>
+> А затем вводим <br>
 > Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
 
 Имеются ещё методы ConfirmEmail, на который должен проходить по ссылке участник из своей почты, и часть кода в теле метода AddAttendee, но они пока не настроены до конца.
