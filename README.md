@@ -73,27 +73,28 @@ P.S.: отправка сообщения на почту реализована
 
 Если уже имеется VS, то после запуска ctr+f5 в консоли диспетчера или в powershell (на разных ос могут быть различия) можно работать через утилиту Invoke-RestMethod:
 
-Запуск метода ViewAllMeetings:
+Запуск метода ViewAllMeetings():
 
 > Invoke-RestMethod http://localhost:50590/api/meetings/viewallmeetings -Method POST
 
-Запуск метода DeleteAttendee:
+Запуск метода DeleteAttendee(Id):
 
 > Invoke-RestMethod http://localhost:50590/api/meetings/deleteattendee/2 -Method POST
 
-Запуск метода DeleteMeeting
+Запуск метода DeleteMeeting(Id) 
 
 > Invoke-RestMethod http://localhost:50590/api/meetings/deletemeeting/2 -Method POST
 
-Запуск метода AddMeeting:
+Запуск метода AddMeeting(AttendeeDto):
 
 > Invoke-RestMethod http://localhost:50590/api/meetings/AddMeeting -Method POST -Body (@{title = "Meeting6"; datetimestart = "05/10/2020 13:00"; datetimeend = "05/10/2020 17:00"} | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
 
 Запуск метода AddAttendee:
 
-> $body = //здесь должны быть данные участников, но пока не смог правильно их внести<br>
-> данные в json:<br>
-
+> $body = //здесь должны быть введены данные участников
+<br>
+> данные в JSON, которые должны будут записаны в body:
+<br>
 ```json
 {
     "meetingid": "10",
@@ -110,9 +111,10 @@ P.S.: отправка сообщения на почту реализована
 }
 ```
 <br>
+> А затем вводим
 > Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
 
-Имеются ещё методы ConfirmEmail, на который должен проходить по ссылке участник, и часть кода в теле метода AddAttendee, но они пока не настроены до конца.
+Имеются ещё методы ConfirmEmail, на который должен проходить по ссылке участник из своей почты, и часть кода в теле метода AddAttendee, но они пока не настроены до конца.
 
 #### postman
 
@@ -144,3 +146,5 @@ P.S.: отправка сообщения на почту реализована
 4. Отправить запрос.
 
 Вернуться значения, где будет указано: кто был добавлен, а кто был отклонён.
+
+Таким же образом тестируются остальные методы, где необходимо либо ввести ссылку, либо ещё указать json данные.
