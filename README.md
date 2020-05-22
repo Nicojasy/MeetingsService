@@ -108,23 +108,26 @@ P.S.: отправка сообщения на почту реализована
         }
     ]
 }
-```<br>
+```
+<br>
 > Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
 
-Имеются ещё методы ConfirmEmail, на который должен проходить по ссылке участник и часть кода в теле метода AddAttendee, но они пока не настроены до конца.
+Имеются ещё методы ConfirmEmail, на который должен проходить по ссылке участник, и часть кода в теле метода AddAttendee, но они пока не настроены до конца.
 
 #### postman
 
-Метод AddAttende можно протестировать с помощью Postman:
-путь указать:
+Метод AddAttende можно протестировать с помощью Postman.
 
-> Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
+1. Установить метод POST.
 
-В Body->raw->json внести:
+2. Указать путь:
+> Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee
+
+3. В Body->raw->json внести:
 
 ```json
 {
-    "meetingid": "10",
+    "meetingid": "1",
     "attendee": [
         {
             "name": "Jake",
@@ -138,4 +141,6 @@ P.S.: отправка сообщения на почту реализована
 }
 ```
 
-Затем сделать запрос и вернуться значения, кто был добавлен, а кто был отклонён.
+4. Отправить запрос.
+
+Вернуться значения, где будет указано: кто был добавлен, а кто был отклонён.
