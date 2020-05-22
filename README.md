@@ -30,22 +30,36 @@ P.S.: отправка сообщения на почту реализована
 
 ## Работа с проектом
 
-### Для работы приложения включены пакеты:
-Работа EF Core:
-Microsoft.EntityFrameworkCore.SqlServer
-Microsoft.EntityFrameworkCore.Tools
-Для отправки email и создания Token:
-MailKit
-Microsoft.IdentityModel.Tokens
-Для xUnit-тестирования:
-xunit
-xunit.runner.visualstudio
-Microsoft.NET.Test.Sdk
-Moq
+### Для работы приложения включены пакеты
 
-### Запуск:
+Работа EF Core:
+
+> Microsoft.EntityFrameworkCore.SqlServer
+
+> Microsoft.EntityFrameworkCore.Tools
+
+Для отправки email и создания Token:
+
+> MailKit
+
+> Microsoft.IdentityModel.Tokens
+
+Для xUnit-тестирования:
+
+> xunit
+
+> xunit.runner.visualstudio
+
+> Microsoft.NET.Test.Sdk
+
+> Moq
+
+### Перед запуском
+
 В проекте необходимо открыть и перед запуском настроить:
-* Необходимо изменить значение "DefaultConnection" на актуальное для настройки бд по пути "\MeetingService\appsettings.json"
+
+1. Необходимо изменить значение "DefaultConnection" на актуальное для настройки бд по пути "\MeetingService\appsettings.json"
+
 ```json
 ...
 "ConnectionStrings": {
@@ -53,30 +67,36 @@ Moq
   },
 ...
 ```
-* Дополнительно для работы отправки сообщений при реализации необходимо изменить данные в "\MeetingService\Services\EmailService.cs" и "\MeetingService\Config\AuthOptions.cs" на актуальные.
+
+2. Дополнительно для работы отправки сообщений при реализации необходимо изменить данные в "\MeetingService\Services\EmailService.cs" и "\MeetingService\Config\AuthOptions.cs" на актуальные.
+
+3. Возможно, потребуется создать бд на сервере без создания таблиц.
+
+### Запуск
 
 Если уже имеется VS, то после запуска ctr+f5 в консоли диспетчера или в powershell (на разных ос могут быть различия) можно работать через утилиту Invoke-RestMethod:
 
 Запуск метода ViewAllMeetings:
 
-Invoke-RestMethod http://localhost:50590/api/meetings/viewallmeetings -Method POST
+> Invoke-RestMethod http://localhost:50590/api/meetings/viewallmeetings -Method POST
 
 Запуск метода DeleteAttendee:
 
-Invoke-RestMethod http://localhost:50590/api/meetings/deleteattendee/2 -Method POST
+> Invoke-RestMethod http://localhost:50590/api/meetings/deleteattendee/2 -Method POST
 
 Запуск метода DeleteMeeting
 
-Invoke-RestMethod http://localhost:50590/api/meetings/deletemeeting/2 -Method POST
+> Invoke-RestMethod http://localhost:50590/api/meetings/deletemeeting/2 -Method POST
 
 Запуск метода AddMeeting:
 
-Invoke-RestMethod http://localhost:50590/api/meetings/AddMeeting -Method POST -Body (@{title = "Meeting6"; datetimestart = "05/10/2020 13:00"; datetimeend = "05/10/2020 17:00"} | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
+> Invoke-RestMethod http://localhost:50590/api/meetings/AddMeeting -Method POST -Body (@{title = "Meeting6"; datetimestart = "05/10/2020 13:00"; datetimeend = "05/10/2020 17:00"} | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
 
 Запуск метода AddAttendee:
 
-$body = !здесь должны быть данные участников, но пока не смог правильно их внести
-!данные в json:
+> $body = здесь должны быть данные участников, но пока не смог правильно их внести
+
+> !данные в json:
 
 ```json
 {
@@ -94,14 +114,14 @@ $body = !здесь должны быть данные участников, н�
 }
 ```
 
-Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
+> Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
 
 Имеются ещё методы ConfirmEmail, на который должен проходить по ссылке участник и часть кода в теле метода AddAttendee, но они пока не настроены до конца.
 
 Метод AddAttende можно протестировать с помощью Postman:
 путь указать:
 
-Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
+> Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body ($body | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
 
 В Body->raw->json внести:
 
