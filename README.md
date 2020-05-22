@@ -40,7 +40,7 @@ P.S.: отправка сообщения на почту реализована
     
     Body: null
     
-    Output:
+    Output: \[{title, datetimestart, datetimeend, attendeesDto: \[{name, email}..{..}]},..{..}]
     
 *   Удалить участника (DeleteAttendee)
     
@@ -48,7 +48,7 @@ P.S.: отправка сообщения на почту реализована
     
     Body: null
     
-    Output:
+    Output: result_string
     
 *   Отменить встречу (DeleteMeeting)
     
@@ -56,7 +56,7 @@ P.S.: отправка сообщения на почту реализована
     
     Body: null
     
-    Output:
+    Output: result_string
         
 *   Поставить встречу (AddMeeting)
 
@@ -64,38 +64,33 @@ P.S.: отправка сообщения на почту реализована
     
     Body: title, datetimestart, datetimeend
     
-    Output:
+    Output: result_string
     
 *   Добавить участников (AddAttendee)
     
     URL-адрес: http://localhost:50590/api/meetings/AddAttendee
     
-    Body: meetingid, attendee: \[{name, email},{name, email},..{name,email}]
+    Body: meetingid, attendee: \[{name, email}..{..}]
 
-    Output:
+    Output: result_string
     
 ### Для работы приложения включены пакеты
 
 Работа EF Core:
 
-> Microsoft.EntityFrameworkCore.SqlServer
-<br>
+> Microsoft.EntityFrameworkCore.SqlServer<br>
 > Microsoft.EntityFrameworkCore.Tools
 
 Для отправки email и создания Token:
 
-> MailKit
-<br>
+> MailKit<br>
 > Microsoft.IdentityModel.Tokens
 
 Для xUnit-тестирования:
 
-> xunit
-<br>
-> xunit.runner.visualstudio
-<br>
-> Microsoft.NET.Test.Sdk
-<br>
+> xunit<br>
+> xunit.runner.visualstudio<br>
+> Microsoft.NET.Test.Sdk<br>
 > Moq
 
 ### Перед запуском
@@ -140,10 +135,8 @@ P.S.: отправка сообщения на почту реализована
 
 Запуск метода AddAttendee(AttendeeDto):
 
-> $body = //здесь должны быть введены данные участников
-<br>
-> данные в JSON, которые должны будут записаны в body:
-<br>
+> $body = //здесь должны быть введены данные участников<br>
+> данные в JSON, которые должны будут записаны в body:<br>
 ```json
 {
     "meetingid": "10",
@@ -214,8 +207,7 @@ P.S.: отправка сообщения на почту реализована
 
 > http://localhost:50590/api/meetings/AddMeeting
 
->json данные для отправки
-<br>
+> json данные для отправки<br>
 ```json
 {
     "title": "MeetingN",
@@ -228,8 +220,7 @@ P.S.: отправка сообщения на почту реализована
 
 > http://localhost:50590/api/meetings/AddAttendee
 
->json данные для отправки
-<br>
+> json данные для отправки<br>
 ```json
 {
     "meetingid": "2",
