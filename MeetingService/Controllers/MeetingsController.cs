@@ -23,16 +23,15 @@ namespace MeetingsService.Controllers
             db = context;
         }
 
-        //Invoke-RestMethod http://localhost:50590/api/meetings/viewallmeetings -Method POST
         // POST api/meetings
         [HttpPost]
         [Route("[action]")]
         public ActionResult ViewAllMeetings()
         {
-            return new JsonResult(GetMeetingsJson1());
+            return new JsonResult(GetMeetingsJson());
         }
 
-        protected List<MeetingDtoView> GetMeetingsJson1()
+        protected List<MeetingDtoView> GetMeetingsJson()
         {
             List<MeetingDtoView> meetings = new List<MeetingDtoView>();
             foreach (var meeting in db.Meetings.Include(m => m.MeetingAttendees).ThenInclude(ma => ma.Attendee).ToList())
@@ -55,7 +54,6 @@ namespace MeetingsService.Controllers
             return meetings;
         }
 
-        //Invoke-RestMethod http://localhost:50590/api/meetings/deleteattendee/2 -Method POST
         // DELETE api/meetings/deleteattendee/5
         [HttpPost]
         [Route("[action]/{id}")]
@@ -71,7 +69,6 @@ namespace MeetingsService.Controllers
             return Ok($"{attendee.Name}: {attendee.Email} is deleted");
         }
 
-        //Invoke-RestMethod http://localhost:50590/api/meetings/deletemeeting/2 -Method POST
         // DELETE api/meeting/deletemeeting/5
         [HttpPost]
         [Route("[action]/{id}")]
@@ -87,7 +84,6 @@ namespace MeetingsService.Controllers
             return Ok($"{meeting.Title} is deleted");
         }
 
-        //Invoke-RestMethod http://localhost:50590/api/meetings/AddMeeting -Method POST -Body (@{title = "Meeting6"; datetimestart = "05/10/2020 13:00"; datetimeend = "05/10/2020 17:00"} | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
         // ADD api/meeting/addmeeting
         [HttpPost]
         [Route("[action]")]
@@ -95,7 +91,6 @@ namespace MeetingsService.Controllers
         {
             if (!Validation.IsValidName(dto.title))
                 return BadRequest($"Error: {dto.title}");
-            //sql: YYYY-MM-DD hh:mm:ss 1000-01-01 00:00:00 to 9999-12-31 23:59:59
             if (!DateTime.TryParseExact(dto.datetimestart, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture,
                             DateTimeStyles.None, out DateTime datetimeStart))
                 return BadRequest($"{dto.datetimestart} is not in an acceptable format.");
@@ -103,14 +98,13 @@ namespace MeetingsService.Controllers
                             DateTimeStyles.None, out DateTime datetimeEnd))
                 return BadRequest($"{dto.datetimeend} is not in an acceptable format.");
             if (datetimeStart > datetimeEnd)
-                return BadRequest($"Error: {datetimeStart}>{datetimeEnd}");
+                return BadRequest($"Error: {dto.datetimestart}>{dto.datetimeend}");
 
             db.Meetings.Add(new Meeting { Title = dto.title, DatetimeStart = datetimeStart, DatetimeEnd = datetimeEnd});
             await db.SaveChangesAsync();
-            return Ok($"Meeting \"{dto.title}\" added");
+            return new OkObjectResult($"Meeting \"{dto.title}\" added");
         }
 
-        //Invoke-RestMethod http://localhost:50590/api/meetings/AddAttendee -Method POST -Body (@{meetingid = "3"; name = "Jack"; email="jack@gmail.com"} | ConvertTo-Json) -ContentType "application/json; charset=utf-8"
         // ADD api/meeting/addattendee
         [HttpPost]
         [Route("[action]")]
@@ -186,12 +180,37 @@ namespace MeetingsService.Controllers
             // Token
             foreach (Attendee attendee in atList)
             {
-                await Token(attendee.Id, attendee.Name, attendee.Email);
+                await CreateTokenAndSendEmail(attendee.Id, attendee.Name, attendee.Email);
             }
             if (result != "")
                 return Ok(result);
             else
                 return BadRequest("Request is incorrect");
+        }
+
+
+        [HttpPost]
+        public async Task CreateTokenAndSendEmail(int id, string name, string email)
+        {
+            // create JWT-token
+            var now = DateTime.UtcNow;
+            var jwt = new JwtSecurityToken(
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
+                    notBefore: now,
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            db.Tokens.Add(new Token() { AttendeeId = id, Code = encodedJwt });
+
+            //email
+            var callbackUrl = Url.Action(
+                "CoonfirmEmail",
+                "Meetings",
+                new { attendeId = id, code = encodedJwt },
+                protocol: HttpContext.Request.Scheme);
+            EmailService emailService = new EmailService();
+            await emailService.SendEmailAsync(email, "Confirm your account",
+                $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
         }
 
         [HttpGet]
@@ -219,31 +238,6 @@ namespace MeetingsService.Controllers
             }
             else
                 return BadRequest("Sorry, wrong data!");
-        }
-
-        [HttpPost]
-        public async Task Token(int id, string name, string email)
-        {
-
-            var now = DateTime.UtcNow;
-            // create JWT-token
-            var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    notBefore: now,
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            db.Tokens.Add(new Token () { AttendeeId = id, Code = encodedJwt});
-
-            //email
-            var callbackUrl = Url.Action(
-                "CoonfirmEmail",
-                "Meetings",
-                new { attendeId = id, code = encodedJwt},
-                protocol: HttpContext.Request.Scheme);
-            EmailService emailService = new EmailService();
-            await emailService.SendEmailAsync(email, "Confirm your account",
-                $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
         }
     }
 }

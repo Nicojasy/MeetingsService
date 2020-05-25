@@ -1,8 +1,5 @@
 using MeetingsService.Controllers;
-using MeetingsService.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using static MeetingsService.Controllers.Dto;
@@ -11,51 +8,52 @@ namespace MeetingsService.Test
 {
     public class UnitTestsAddMeeting
     {
-        private List<Meeting> GetTestMeetings()
+        private MeetingsController controller;
+
+        public UnitTestsAddMeeting()
         {
-            var users = new List<Meeting>
-            {
-            new Meeting { Id=1, Title="Meeting0", DatetimeStart = new DateTime(2020, 06, 07, 16, 00, 00), DatetimeEnd = new DateTime(2020, 06, 07, 17, 00, 00), IsNewsletterDone = false },
-            new Meeting { Id=2, Title="Meeting1", DatetimeStart = new DateTime(2020, 06, 07, 16, 00, 00), DatetimeEnd = new DateTime(2020, 06, 07, 17, 00, 00), IsNewsletterDone = false },
-            new Meeting { Id=3, Title="Meeting2", DatetimeStart = new DateTime(2020, 06, 07, 16, 00, 00), DatetimeEnd = new DateTime(2020, 06, 07, 17, 00, 00), IsNewsletterDone = false },
-            new Meeting { Id=4, Title="Meeting3", DatetimeStart = new DateTime(2020, 06, 07, 16, 00, 00), DatetimeEnd = new DateTime(2020, 06, 07, 17, 00, 00), IsNewsletterDone = false },
-                };
-            return users;
+            // Arrange
+            controller = new MeetingsController(null);
         }
+
         [Theory]
-        [InlineData("MeetingTestttttttttttttttttttttttttttttttttttttttttttttttttt","05/09/2020 20:42","05/09/2020 20:52")]
+        [InlineData("MeetingTestttttttttttttttttttttttttttttttttttttttttttttttttt", "05/09/2020 20:42","05/09/2020 20:52")]
         [InlineData(null, "07/09/2020 20:42", "07/09/2020 20:52")]
         public async Task AddMeetingReturnsBadRequestResultWhenIsValidNameBad(string _title, string _datetimeStart, string _datetimeEnd)
         {
-
-            var controller = new MeetingsController(null);
-            
             var result = await controller.AddMeeting(new MeetingDto { title = _title, datetimestart = _datetimeStart, datetimeend = _datetimeEnd }) as BadRequestObjectResult;
 
-            Assert.Equal(result.Value, $"Error: {_title}");
+            Assert.Equal($"Error: {_title}", result.Value);
         }
 
-        private IDisposable GetContextWithData()
+        [Theory]
+        [InlineData("MeetingTest1", "05.09.2020 20:42", "05/09/2020 20:52")]
+        [InlineData("MeetingTest2", "05/09/2020 20:42 PM", "05/09/2020 20:52")]
+        public async Task AddMeetingReturnsBadRequestResultWhenTryParseExactDatetimeStartIsBad(string _title, string _datetimeStart, string _datetimeEnd)
         {
-            throw new NotImplementedException();
+            var result = await controller.AddMeeting(new MeetingDto { title = _title, datetimestart = _datetimeStart, datetimeend = _datetimeEnd }) as BadRequestObjectResult;
+
+            Assert.Equal($"{_datetimeStart} is not in an acceptable format.", result.Value);
         }
 
-        [Fact]
-        public void AddMeetingReturnsBadRequestResultWhenTryParseExactDatetimeStartIsBad()
+        [Theory]
+        [InlineData("MeetingTest1", "05/09/2020 20:42", "05.09.2020 20:52")]
+        [InlineData("MeetingTest2", "05/09/2020 20:42", "05/09/2020 20:52 PM")]
+        public async Task AddMeetingReturnsBadRequestResultWhenTryParseExactDatetimeEndIsBad(string _title, string _datetimeStart, string _datetimeEnd)
         {
+            var result = await controller.AddMeeting(new MeetingDto { title = _title, datetimestart = _datetimeStart, datetimeend = _datetimeEnd }) as BadRequestObjectResult;
 
+            Assert.Equal($"{_datetimeEnd} is not in an acceptable format.", result.Value);
         }
 
-        [Fact]
-        public void AddMeetingReturnsBadRequestResultWhenTryParseExactDatetimeEndIsBad()
+        [Theory]
+        [InlineData("MeetingTest1", "05/09/2020 20:52", "05/09/2020 20:42")]
+        [InlineData("MeetingTest2", "05/09/2020 20:42", "04/09/2020 20:52")]
+        public async Task AddMeetingReturnsBadRequestResultWhenDatetimeStartGreaterThanDatetimeEnd(string _title, string _datetimeStart, string _datetimeEnd)
         {
+            var result = await controller.AddMeeting(new MeetingDto { title = _title, datetimestart = _datetimeStart, datetimeend = _datetimeEnd }) as BadRequestObjectResult;
 
-        }
-
-        [Fact]
-        public void AddMeetingReturnsViewResultWithUserModel()
-        {
-
+            Assert.Equal($"Error: {_datetimeStart}>{_datetimeEnd}", result.Value);
         }
     }
 }
